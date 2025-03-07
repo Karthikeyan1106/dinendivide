@@ -8,19 +8,37 @@ function FormSplitBill({ friend,handleSplitBill }) {
 
     const paidByFriend = bill ? bill - paidbyUser : "";
 
+    function handleBillChange(e) {
+        const value = e.target.value;
+        if (!isNaN(value) || value === "") {
+            setBill(value);
+        }
+    }
+
+    const handlePaidByUserChange = (e) => {
+        const value = e.target.value;
+        console.log(value);
+
+        if (!isNaN(value) || value === "") {
+            setPaidByUser(value > bill ? paidbyUser : value);
+        }
+    };
+
+
     function handleSubmit(e) { 
         e.preventDefault();
         if (!bill || !paidbyUser) return;
 
          handleSplitBill(whoIsPaying === 'user' ? paidByFriend : -paidbyUser )
     }
+
     return (
         <form onSubmit={handleSubmit} className="form-split-bill">
             <h2>Split the bill with {friend.name}</h2>
             <label>Bill value</label>
-            <input type="text" value={bill} onChange={(e)=>setBill(+e.target.value)} /> 
+            <input type="text" value={bill} onChange={handleBillChange} /> 
             <label>Your Expense</label>
-            <input type="text" value={paidbyUser} onChange={(e)=>setPaidByUser(+e.target.value > bill ? paidbyUser : +e.target.value)} />
+            <input type="text" value={paidbyUser} onChange={handlePaidByUserChange} />
             <label>{friend.name}'s Expense</label>
             <input type="text" value={paidByFriend} disabled />
             <label>Who's paying the bill</label>
